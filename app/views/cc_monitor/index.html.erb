@@ -1,0 +1,46 @@
+<table id="projects">
+	<% headers = ["vmdb", "migrations", "lib", "vmdb_metrics", "replication"] %>
+	<% num_rows = @data.inject(0) { |n, (_, projects)| n + projects.length } %>
+	<colgroup>
+		<col style="width: 10%" />
+		<col style="width: 10%" />
+		<% headers.length.times do %>
+			<col style="width: <%= 80 / headers.length %>%" />
+		<% end %>
+	</colgroup>
+	<thead>
+		<tr style="height: 5%">
+			<th id="countdown" colspan=2 />
+			<% headers.each do |h| %>
+				<th><%= h.titleize %></th>
+			<% end %>
+		</tr>
+	</thead>
+	<% @data.each do |branch, projects| %>
+		<% projects = projects.sort.reverse %>
+		<% projects.each_with_index do |(db, categories), i| %>
+			<tr style="height: <%= 95 / num_rows %>%">
+			<% if i == 0 %>
+				<th rowspan=<%= projects.length %>><%= branch.titleize %></th>
+			<% end %>
+			<th><%= db.upcase %></th>
+			<% headers.each do |h| %>
+				<% c = categories[h] %>
+				<% if c.blank? %>
+					<td />
+				<% else %>
+					<td class="<%= c[:status] %>">
+						<% name = c[:last_built].blank? ? "Never Built" : "#{time_ago_in_words(c[:last_built])} ago".capitalize %>
+						<%= link_to name, c[:url], :target => "_blank" %>
+						<% if c[:activity] == :building %>
+							<div class="spinner">
+								<%= image_tag "spinner_#{c[:status]}.gif" %>
+							</div>
+						<% end %>
+					</td>
+				<% end %>
+			<% end %>
+			</tr>
+		<% end %>
+	<% end %>
+</table>

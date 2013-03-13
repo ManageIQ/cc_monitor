@@ -1,0 +1,78 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+*/
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+#projects {
+/* NOTE: #projects cells width and height are dynamically styled */
+	margin: auto;
+	height: 100%;
+	text-align: center;
+}
+
+#projects a {
+	text-decoration: underline;
+	color: white;
+}
+
+#projects th, #projects td {
+	border: 1px solid silver;
+	padding: 5px;
+}
+
+#projects thead {
+	background-color: #E5E5E5;
+}
+
+#projects th {
+	font-variant: small-caps;
+	font-size: larger;
+}
+
+#projects td.success {
+	background-color: green;
+}
+
+#projects td.failure, #projects td.unknown {
+	background-color: red;
+}
+
+#projects td.rebuilding {
+	background-color: yellow;
+}
+
+#projects td.rebuilding a {
+	color: black;
+}
+
+#projects td.down {
+	background-color: gray;
+}
+
+#projects .spinner {
+	position: relative;
+	top: 0.5em;
+}
+
+#projects .spinner img {
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+}
