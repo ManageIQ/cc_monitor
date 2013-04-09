@@ -3,6 +3,7 @@
 - http://cruisecontrolmssql401.manageiq.com:3333/XmlStatusReport.aspx
 - http://cruisecontrol5.manageiq.com:3333/XmlStatusReport.aspx
 - http://cruisecontrolmssql5.manageiq.com:3333/XmlStatusReport.aspx
+- http://cruisecontrol-510x-pg.manageiq.com:3333/XmlStatusReport.aspx
 - http://cruisecontrol.manageiq.com:3333/XmlStatusReport.aspx
 - http://cruisecontrolmssql.manageiq.com:3333/XmlStatusReport.aspx
 - http://cruisecontrol-metrics.manageiq.com:3333/XmlStatusReport.aspx
