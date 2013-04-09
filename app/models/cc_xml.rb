@@ -56,7 +56,7 @@ class CcXml
 
     if category.nil?
       category = version
-      version  = "trunk"
+      version  = "master"
     end
 
     {
