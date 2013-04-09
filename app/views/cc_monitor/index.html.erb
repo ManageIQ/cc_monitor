@@ -33,8 +33,12 @@
 						<% name = c[:last_built].blank? ? "Never Built" : "#{time_ago_in_words(c[:last_built])} ago".capitalize %>
 						<%= link_to name, c[:url], :target => "_blank" %>
 						<% if c[:activity] == :building %>
-							<div class="spinner">
+							<div class="icon">
 								<%= image_tag "spinner_#{c[:status]}.gif" %>
+							</div>
+						<% elsif c[:activity] == :queued %>
+							<div class="icon">
+								<%= image_tag "queued.png" %>
 							</div>
 						<% end %>
 					</td>

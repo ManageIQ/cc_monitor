@@ -11,6 +11,7 @@ describe CcXml do
   <Project nextBuildTime="1970-01-01T00:00:00.000000-00:00" activity="Sleeping" webUrl="http://cruisecontrol.manageiq.com:3333/projects/pg-migrations" lastBuildStatus="Failure" lastBuildLabel="34414" name="pg-migrations" lastBuildTime="2012-04-04T15:45:20.0000000-00:00" category=""/>
   <Project nextBuildTime="1970-01-01T00:00:00.000000-00:00" activity="Building" webUrl="http://cruisecontrol.manageiq.com:3333/projects/pg-ui" lastBuildStatus="Failure" lastBuildLabel="34423" name="pg-ui" lastBuildTime="2012-04-04T15:45:20.0000000-00:00" category=""/>
   <Project nextBuildTime="1970-01-01T00:00:00.000000-00:00" activity="Building" webUrl="http://cruisecontrol.manageiq.com:3333/projects/pg-ui_metrics" lastBuildStatus="Success" lastBuildLabel="34389" name="pg-ui_metrics" lastBuildTime="2012-04-04T15:45:20.0000000-00:00" category=""/>
+  <Project nextBuildTime="1970-01-01T00:00:00.000000-00:00" activity="Unknown" webUrl="http://cruisecontrol.manageiq.com:3333/projects/pg-vmdb" lastBuildStatus="Success" lastBuildLabel="34403" name="pg-vmdb" lastBuildTime="2012-04-04T15:45:20.0000000-00:00" category=""/>
 </Projects>
   EOX
 
@@ -70,6 +71,16 @@ describe CcXml do
           :db         => "pg",
           :version    => "trunk",
           :category   => "ui_metrics",
+        },
+        {
+          :name       => "pg-vmdb",
+          :status     => :success,
+          :activity   => :queued,
+          :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-vmdb",
+          :last_built => "2012-04-04 15:45:20 -0400",
+          :db         => "pg",
+          :version    => "trunk",
+          :category   => "vmdb",
         },
       ]
     end

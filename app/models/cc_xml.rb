@@ -28,10 +28,13 @@ class CcXml
   private
 
   def convert_data(parsed)
+    activity = parsed[:activity]
+    activity = :queued if parsed[:activity] == :unknown
+
     status = parsed[:last_build_status]
     if status.blank?
       status = :down
-    elsif status == :failure && parsed[:activity] == :building
+    elsif status == :failure && activity == :building
       status = :rebuilding
     end
 
@@ -42,7 +45,7 @@ class CcXml
     {
       :name       => parsed[:name],
       :status     => status,
-      :activity   => parsed[:activity],
+      :activity   => activity,
       :url        => parsed[:web_url],
       :last_built => last_built,
     }.merge(name_parts)

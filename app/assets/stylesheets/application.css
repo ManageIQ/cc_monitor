@@ -64,12 +64,12 @@ html, body {
 	background-color: gray;
 }
 
-#projects .spinner {
+#projects .icon {
 	position: relative;
 	top: 0.5em;
 }
 
-#projects .spinner img {
+#projects .icon img {
 	position: absolute;
 	left: 0;
 	right: 0;
