@@ -37,10 +37,7 @@ class CcXml
 
     name_parts = parse_name(parsed[:name])
 
-    last_built =  begin
-                    Time.parse(Time.parse(parsed[:last_build_time]).asctime).to_s  # Hack for old cruise control machines with no timezone in string
-                  rescue
-                  end
+    last_built = Time.parse(Time.parse(parsed[:last_build_time]).asctime) unless parsed[:last_build_time].blank?  # Hack for old cruise control machines with no timezone in string
 
     {
       :name       => parsed[:name],
