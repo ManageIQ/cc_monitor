@@ -77,9 +77,9 @@ describe CcXml do
           :status     => :success,
           :activity   => :queued,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-vmdb",
-          :last_built => "2012-04-04 15:45:20 -0400",
+          :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
           :db         => "pg",
-          :version    => "trunk",
+          :version    => "master",
           :category   => "vmdb",
         },
       ]
