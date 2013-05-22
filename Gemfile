@@ -49,3 +49,4 @@ end
 
 gem 'nokogiri'
 gem 'thin'
+gem 'more_core_extensions'

@@ -10,7 +10,7 @@ if defined?(Bundler)
 end
 
 # Load MIQ dependencies
-require_relative "../../../cfme/lib/util/extensions/miq-hash"
+require 'more_core_extensions/all'
 
 module CcMonitor
   class Application < Rails::Application

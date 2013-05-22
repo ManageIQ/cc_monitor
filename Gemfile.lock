@@ -49,6 +49,8 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.22)
+    more_core_extensions (1.0.0)
+      activesupport
     multi_json (1.7.2)
     nokogiri (1.5.9)
     polyglot (0.3.3)
@@ -121,6 +123,7 @@ PLATFORMS
 DEPENDENCIES
   jquery-rails
   libv8 (= 3.11.8.4)
+  more_core_extensions
   nokogiri
   rails (~> 3.2.0)
   rspec
