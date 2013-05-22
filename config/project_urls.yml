@@ -1,9 +1,9 @@
 ---
-- http://cruisecontrol401.manageiq.com:3333/XmlStatusReport.aspx
-- http://cruisecontrolmssql401.manageiq.com:3333/XmlStatusReport.aspx
-- http://cruisecontrol5.manageiq.com:3333/XmlStatusReport.aspx
-- http://cruisecontrolmssql5.manageiq.com:3333/XmlStatusReport.aspx
-- http://cruisecontrol510.manageiq.com:3333/XmlStatusReport.aspx
-- http://cruisecontrol.manageiq.com:3333/XmlStatusReport.aspx
-- http://cruisecontrolmssql.manageiq.com:3333/XmlStatusReport.aspx
-- http://cruisecontrol-metrics.manageiq.com:3333/XmlStatusReport.aspx
+- http://cruisecontrol401.manageiq.redhat.com:3333/XmlStatusReport.aspx
+- http://cruisecontrolmssql401.manageiq.redhat.com:3333/XmlStatusReport.aspx
+- http://cruisecontrol5.manageiq.redhat.com:3333/XmlStatusReport.aspx
+- http://cruisecontrolmssql5.manageiq.redhat.com:3333/XmlStatusReport.aspx
+- http://cruisecontrol510.manageiq.redhat.com:3333/XmlStatusReport.aspx
+- http://cruisecontrol.manageiq.redhat.com:3333/XmlStatusReport.aspx
+- http://cruisecontrolmssql.manageiq.redhat.com:3333/XmlStatusReport.aspx
+- http://cruisecontrol-metrics.manageiq.redhat.com:3333/XmlStatusReport.aspx
