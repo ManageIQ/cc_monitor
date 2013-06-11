@@ -17,14 +17,14 @@
   </thead>
   <% @data.each do |branch, projects| %>
     <% projects = projects.sort.reverse %>
-    <% projects.each_with_index do |(db, categories), i| %>
+    <% projects.each_with_index do |(db, cells), i| %>
       <tr style="height: <%= 95 / num_rows %>%">
       <% if i == 0 %>
         <th rowspan=<%= projects.length %>><%= branch.titleize %></th>
       <% end %>
       <th><%= db.upcase %></th>
       <% @categories.each do |h| %>
-        <% c = categories[h] %>
+        <% c = cells[h] %>
         <% if c.blank? %>
           <td />
         <% else %>
