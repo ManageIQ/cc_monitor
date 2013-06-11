@@ -1,0 +1,8 @@
+---
+- vmdb
+- migrations
+- lib
+- replication
+- vmdb_metrics
+- brakeman
+- automation

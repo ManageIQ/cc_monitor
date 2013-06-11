@@ -20,9 +20,14 @@ class Project
     data.sort.reverse
   end
 
+  def categories
+    YAML.load_file(CATEGORIES_PATH)
+  end
+
   private
 
-  URLS_PATH = Rails.root.join("config", "project_urls.yml")
+  CATEGORIES_PATH = Rails.root.join("config", "project_categories.yml")
+  URLS_PATH       = Rails.root.join("config", "project_urls.yml")
 
   def raw_data
     @raw_data ||= begin
