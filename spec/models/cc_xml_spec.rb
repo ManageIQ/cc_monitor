@@ -145,7 +145,7 @@ describe CcXml do
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-lib",
           :last_built => nil,
           :version    => "",
-          :db         => nil,
+          :db         => "http://cruisecontrol.manageiq.com:3333/projects/pg-lib",
           :category   => nil,
         }
       ]

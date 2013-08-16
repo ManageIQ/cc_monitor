@@ -40,7 +40,7 @@ class CcXml
 
     name_parts =
       if status == :down
-        server_down_name_parts
+        server_down_name_parts(parsed[:web_url])
       else
         parse_name_parts(parsed[:name])
       end
@@ -71,10 +71,10 @@ class CcXml
     }
   end
 
-  def server_down_name_parts
+  def server_down_name_parts(url)
     {
       :version  => "",
-      :db       => nil,
+      :db       => url,
       :category => nil,
     }
   end

@@ -54,7 +54,7 @@ describe Project do
         described_class.new.data.should == [
           ["",
             {
-              nil => {
+              "http://cruisecontrol/XmlStatusReport.aspx" => {
                 nil => {
                   :name       => nil,
                   :status     => :down,
@@ -62,7 +62,7 @@ describe Project do
                   :url        => "http://cruisecontrol/XmlStatusReport.aspx",
                   :last_built => nil,
                   :version    => "",
-                  :db         => nil,
+                  :db         => "http://cruisecontrol/XmlStatusReport.aspx",
                   :category   => nil
                 }
               }
