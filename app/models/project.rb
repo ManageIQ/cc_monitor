@@ -3,12 +3,7 @@ class Project
   def status
     status = :green
     raw_data.each do |d|
-      if d[:status] == :failure
-        status = :red
-        break
-      elsif d[:status] == :rebuilding
-        status = :yellow
-      end
+      status = worst_status(status, RAW_STATUS_TO_STATUS[d[:status]])
     end
     status
   end
@@ -49,13 +44,31 @@ class Project
   end
 
   def get_xml(url)
+    server_down = false
+    xml = nil
+
     require 'open-uri'
     begin
       xml = open(url).read
-      raise StandardError if xml.include?("500 Internal Server Error")
-      xml
+      server_down = true if xml.include?("500 Internal Server Error")
     rescue
-      %|<Projects><Project name="Server Down! #{url}" /></Projects>|
+      server_down = true
     end
+    xml = CcXml.server_down_xml(url) if server_down
+
+    xml
+  end
+
+  STATUSES = [:green, :yellow, :red, :gray]
+
+  RAW_STATUS_TO_STATUS = Hash.new(:green).merge(
+    :down       => :gray,
+    :failure    => :red,
+    :rebuilding => :yellow
+  )
+
+  def worst_status(x, y)
+    worst_status_index = [STATUSES.index(x), STATUSES.index(y)].max
+    STATUSES[worst_status_index]
   end
 end

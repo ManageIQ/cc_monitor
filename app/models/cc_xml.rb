@@ -4,6 +4,10 @@
 include ActionView::Helpers::DateHelper
 
 class CcXml
+  def self.server_down_xml(url)
+    %|<Projects><Project webUrl="#{url}" lastBuildStatus="down" /></Projects>|
+  end
+
   attr_accessor :xml
 
   def initialize(xml)
@@ -15,11 +19,11 @@ class CcXml
     doc.children.first.children.collect do |c|
       parsed = {
         :name              => c["name"],
-        :last_build_status => c["lastBuildStatus"].to_s.downcase.to_sym,
+        :last_build_status => c["lastBuildStatus"] && c["lastBuildStatus"].to_s.downcase.to_sym,
         :last_build_time   => c["lastBuildTime"],
         :last_build_label  => c["lastBuildLabel"],
-        :activity          => c["activity"].to_s.downcase.to_sym,
-        :web_url           => c["webUrl"].to_s.downcase
+        :activity          => c["activity"]        && c["activity"].to_s.downcase.to_sym,
+        :web_url           => c["webUrl"]          && c["webUrl"].to_s
       }
       convert_data(parsed)
     end
@@ -32,13 +36,14 @@ class CcXml
     activity = :queued if parsed[:activity] == :unknown
 
     status = parsed[:last_build_status]
-    if status.blank?
-      status = :down
-    elsif status == :failure && activity == :building
-      status = :rebuilding
-    end
+    status = :rebuilding if status == :failure && activity == :building
 
-    name_parts = parse_name(parsed[:name])
+    name_parts =
+      if status == :down
+        server_down_name_parts
+      else
+        parse_name_parts(parsed[:name])
+      end
 
     last_built = Time.parse(Time.parse(parsed[:last_build_time]).asctime) unless parsed[:last_build_time].blank?  # Hack for old cruise control machines with no timezone in string
 
@@ -51,7 +56,7 @@ class CcXml
     }.merge(name_parts)
   end
 
-  def parse_name(name)
+  def parse_name_parts(name)
     db, version, category = name.split("-")
 
     if category.nil?
@@ -60,9 +65,17 @@ class CcXml
     end
 
     {
-      :db       => db,
       :version  => version.gsub("_", "."),
+      :db       => db,
       :category => category,
+    }
+  end
+
+  def server_down_name_parts
+    {
+      :version  => "",
+      :db       => nil,
+      :category => nil,
     }
   end
 end

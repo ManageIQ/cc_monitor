@@ -38,8 +38,8 @@ describe CcXml do
           :activity   => :checkingmodifications,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-lib",
           :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
-          :db         => "pg",
           :version    => "master",
+          :db         => "pg",
           :category   => "lib",
         },
         {
@@ -48,8 +48,8 @@ describe CcXml do
           :activity   => :sleeping,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-migrations",
           :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
-          :db         => "pg",
           :version    => "master",
+          :db         => "pg",
           :category   => "migrations",
         },
         {
@@ -58,8 +58,8 @@ describe CcXml do
           :activity   => :building,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-ui",
           :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
-          :db         => "pg",
           :version    => "master",
+          :db         => "pg",
           :category   => "ui",
         },
         {
@@ -68,8 +68,8 @@ describe CcXml do
           :activity   => :building,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-ui_metrics",
           :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
-          :db         => "pg",
           :version    => "master",
+          :db         => "pg",
           :category   => "ui_metrics",
         },
         {
@@ -78,8 +78,8 @@ describe CcXml do
           :activity   => :queued,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-vmdb",
           :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
-          :db         => "pg",
           :version    => "master",
+          :db         => "pg",
           :category   => "vmdb",
         },
       ]
@@ -93,8 +93,8 @@ describe CcXml do
           :activity   => :checkingmodifications,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-lib",
           :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
-          :db         => "pg",
           :version    => "master",
+          :db         => "pg",
           :category   => "lib",
         },
         {
@@ -103,8 +103,8 @@ describe CcXml do
           :activity   => :checkingmodifications,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-4_0_1-migrations",
           :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
-          :db         => "pg",
           :version    => "4.0.1",
+          :db         => "pg",
           :category   => "migrations",
         },
       ]
@@ -118,8 +118,8 @@ describe CcXml do
           :activity   => :checkingmodifications,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-lib",
           :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
-          :db         => "pg",
           :version    => "master",
+          :db         => "pg",
           :category   => "lib",
         },
         {
@@ -128,10 +128,26 @@ describe CcXml do
           :activity   => :checkingmodifications,
           :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-4_0_1-migrations",
           :last_built => Time.parse("2012-04-04 15:45:20 -0400"),
-          :db         => "pg",
           :version    => "4.0.1",
+          :db         => "pg",
           :category   => "migrations",
         },
+      ]
+    end
+
+    it "with server_down_xml" do
+      xml = described_class.server_down_xml("http://cruisecontrol.manageiq.com:3333/projects/pg-lib")
+      described_class.new(xml).parse.should == [
+        {
+          :name       => nil,
+          :status     => :down,
+          :activity   => nil,
+          :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-lib",
+          :last_built => nil,
+          :version    => "",
+          :db         => nil,
+          :category   => nil,
+        }
       ]
     end
   end

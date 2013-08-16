@@ -60,8 +60,14 @@ html, body {
 	color: black;
 }
 
-#projects td.down {
-	background-color: gray;
+#projects th.down, #projects td.down {
+	background-color: lightgray;
+}
+
+#projects td.down a {
+	font-size: large;
+	font-weight: bold;
+	color: black;
 }
 
 #projects .icon {
