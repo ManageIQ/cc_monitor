@@ -1,22 +1,26 @@
 class Project
 
   def status
-    status = :green
-    raw_data.each do |d|
-      status = worst_status(status, RAW_STATUS_TO_STATUS[d[:status]])
+    @status ||= begin
+      status = :green
+      raw_data.each do |d|
+        status = worst_status(status, RAW_STATUS_TO_STATUS[d[:status]])
+      end
+      status
     end
-    status
   end
 
   def data
-    data = raw_data.each_with_object({}) do |d, h|
-      h.store_path(d[:version], d[:db], d[:category], d)
+    @data ||= begin
+      data = raw_data.each_with_object({}) do |d, h|
+        h.store_path(d[:version], d[:db], d[:category], d)
+      end
+      data.sort.reverse
     end
-    data.sort.reverse
   end
 
   def categories
-    YAML.load_file(CATEGORIES_PATH)
+    @categories ||= YAML.load_file(CATEGORIES_PATH)
   end
 
   private
@@ -40,7 +44,7 @@ class Project
   end
 
   def urls
-    YAML.load_file(URLS_PATH)
+    @urls ||= YAML.load_file(URLS_PATH)
   end
 
   def get_xml(url)
