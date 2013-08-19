@@ -3,7 +3,7 @@ class Project
   def status
     @status ||= begin
       status = :green
-      raw_data.each do |d|
+      filtered_raw_data.each do |d|
         status = worst_status(status, RAW_STATUS_TO_STATUS[d[:status]])
       end
       status
@@ -12,7 +12,7 @@ class Project
 
   def data
     @data ||= begin
-      data = raw_data.each_with_object({}) do |d, h|
+      data = filtered_raw_data.each_with_object({}) do |d, h|
         h.store_path(d[:version], d[:db], d[:category], d)
       end
       data.sort.reverse
@@ -41,6 +41,10 @@ class Project
 
       data.flatten
     end
+  end
+
+  def filtered_raw_data
+    @filtered_raw_data ||= raw_data.select { |d| d[:category].nil? || categories.include?(d[:category]) }
   end
 
   def urls
