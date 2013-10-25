@@ -47,6 +47,7 @@ class CcXml
       end
 
     last_built = Time.parse(Time.parse(parsed[:last_build_time]).asctime) unless parsed[:last_build_time].blank?  # Hack for old cruise control machines with no timezone in string
+    last_built = nil if last_built.try(:year) == 1970
 
     {
       :name       => parsed[:name],
