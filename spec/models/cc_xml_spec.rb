@@ -12,6 +12,8 @@ describe CcXml do
   <Project nextBuildTime="1970-01-01T00:00:00.000000-00:00" activity="Building" webUrl="http://cruisecontrol.manageiq.com:3333/projects/pg-ui" lastBuildStatus="Failure" lastBuildLabel="34423" name="pg-ui" lastBuildTime="2012-04-04T15:45:20.0000000-00:00" category=""/>
   <Project nextBuildTime="1970-01-01T00:00:00.000000-00:00" activity="Building" webUrl="http://cruisecontrol.manageiq.com:3333/projects/pg-ui_metrics" lastBuildStatus="Success" lastBuildLabel="34389" name="pg-ui_metrics" lastBuildTime="2012-04-04T15:45:20.0000000-00:00" category=""/>
   <Project nextBuildTime="1970-01-01T00:00:00.000000-00:00" activity="Unknown" webUrl="http://cruisecontrol.manageiq.com:3333/projects/pg-vmdb" lastBuildStatus="Success" lastBuildLabel="34403" name="pg-vmdb" lastBuildTime="2012-04-04T15:45:20.0000000-00:00" category=""/>
+  <Project nextBuildTime="1970-01-01T00:00:00.000000-00:00" activity="Unknown" webUrl="http://cruisecontrol.manageiq.com:3333/projects/pg-replication" lastBuildStatus="Unknown" lastBuildLabel="Unknown" name="pg-replication" lastBuildTime="1970-01-01T00:00:00.000000-00:00" category=""/>
+  <Project nextBuildTime="1970-01-01T00:00:00.000000-00:00" activity="Building" webUrl="http://cruisecontrol.manageiq.com:3333/projects/pg-automation" lastBuildStatus="Unknown" lastBuildLabel="Unknown" name="pg-automation" lastBuildTime="1970-01-01T00:00:00.000000-00:00" category=""/>
 </Projects>
   EOX
 
@@ -81,6 +83,26 @@ describe CcXml do
           :version    => "master",
           :db         => "pg",
           :category   => "vmdb",
+        },
+        {
+          :name       => "pg-replication",
+          :status     => :failure,
+          :activity   => :queued,
+          :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-replication",
+          :last_built => Time.parse("1970-01-01 00:00:00 -0500"),
+          :version    => "master",
+          :db         => "pg",
+          :category   => "replication",
+        },
+        {
+          :name       => "pg-automation",
+          :status     => :rebuilding,
+          :activity   => :building,
+          :url        => "http://cruisecontrol.manageiq.com:3333/projects/pg-automation",
+          :last_built => Time.parse("1970-01-01 00:00:00 -0500"),
+          :version    => "master",
+          :db         => "pg",
+          :category   => "automation",
         },
       ]
     end

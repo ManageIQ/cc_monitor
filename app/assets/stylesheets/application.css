@@ -48,7 +48,7 @@ html, body {
 	background-color: green;
 }
 
-#projects td.failure, #projects td.unknown {
+#projects td.failure {
 	background-color: red;
 }
 

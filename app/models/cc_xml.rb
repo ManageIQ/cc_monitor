@@ -36,6 +36,7 @@ class CcXml
     activity = :queued if parsed[:activity] == :unknown
 
     status = parsed[:last_build_status]
+    status = :failure if status == :unknown
     status = :rebuilding if status == :failure && activity == :building
 
     name_parts =
