@@ -28,7 +28,7 @@
 				</td>
 			<% else %>
 				<% if i == 0 %>
-					<th rowspan=<%= projects.length %>><%= branch.titleize %></th>
+					<th rowspan=<%= projects.length %>><%= branch.humanize %></th>
 				<% end %>
 				<th><%= db.upcase %></th>
 				<% @categories.each do |h| %>

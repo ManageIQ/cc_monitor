@@ -62,11 +62,13 @@ class CcXml
 
     if category.nil?
       category = version
-      version  = "master"
+      version  = "upstream"
+    else
+      version  = "#{version.gsub("_", ".")}.x"
     end
 
     {
-      :version  => version.gsub("_", "."),
+      :version  => version,
       :db       => db,
       :category => category,
     }
