@@ -57,7 +57,7 @@ class Project
 
     require 'open-uri'
     begin
-      xml = open(url, :read_timeout => 5).read
+      xml = open(url, :read_timeout => 30).read
       server_down = true if xml.include?("500 Internal Server Error")
     rescue
       server_down = true
