@@ -16,7 +16,7 @@ group :assets do
   # gem 'coffee-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'libv8', '3.11.8.4'
+  gem 'libv8'
   gem 'therubyracer'
 
   gem 'uglifier'
