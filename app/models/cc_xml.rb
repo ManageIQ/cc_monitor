@@ -55,6 +55,7 @@ class CcXml
       :activity   => activity,
       :url        => parsed[:web_url],
       :last_built => last_built,
+      :last_sha   => parsed[:last_build_label].to_s.slice(0, 8)
     }.merge(name_parts)
   end
 

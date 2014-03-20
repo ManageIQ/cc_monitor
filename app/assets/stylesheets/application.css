@@ -46,6 +46,7 @@ html, body {
 
 #projects td.success {
 	background-color: green;
+	color: white;
 }
 
 #projects td.failure {

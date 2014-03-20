@@ -39,6 +39,8 @@
 						<td class="<%= c[:status] %>">
 							<% name = c[:last_built].blank? ? "Never Built" : "#{time_ago_in_words(c[:last_built])} ago".capitalize %>
 							<%= link_to name, c[:url], :target => "_blank" %>
+							</br>
+							<%= c[:last_sha] %>
 							<% if c[:activity] == :building %>
 								<div class="icon">
 									<%= image_tag "spinner_#{c[:status]}.gif" %>
