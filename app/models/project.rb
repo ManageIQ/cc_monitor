@@ -26,7 +26,6 @@ class Project
   private
 
   CATEGORIES_PATH = Rails.root.join("config", "project_categories.yml")
-  URLS_PATH       = Rails.root.join("config", "project_urls.yml")
 
   def raw_data
     @raw_data ||= begin
@@ -34,8 +33,8 @@ class Project
 
       CcXml # Eager load the constant so that it works with threading.
       threads = []
-      urls.each do |url|
-        threads << Thread.new { data << CcXml.new(get_xml(url)).parse }
+      Server.all.each do |server|
+        threads << Thread.new { data << CcXml.new(get_xml(server.url)).parse }
       end
       threads.map(&:join)
 
@@ -45,10 +44,6 @@ class Project
 
   def filtered_raw_data
     @filtered_raw_data ||= raw_data.select { |d| d[:category].nil? || categories.include?(d[:category]) }
-  end
-
-  def urls
-    @urls ||= YAML.load_file(URLS_PATH)
   end
 
   def get_xml(url)
