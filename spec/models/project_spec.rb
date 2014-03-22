@@ -1,99 +1,45 @@
-#
-# Copyright 2013 ManageIQ, Inc.  All rights reserved.
-#
-
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
+require 'spec_helper'
 
 describe Project do
-  context "when server is up" do
-    before do
-      raw_data = [{
-        :name       => "pg-vmdb_metrics",
-        :status     => :success,
-        :activity   => :building,
-        :url        => "http://cruisecontrol-metrics.manageiq.com:3333/projects/pg-vmdb_metrics",
-        :last_built => "2013-01-19 03:19:10 -0500",
-        :version    => "trunk",
-        :db         => "pg",
-        :category   => "vmdb_metrics"
-      }]
-      described_class.any_instance.stub(:raw_data => raw_data)
+  let(:data) do
+    {
+      "name"            => "pg-vmdb",
+      "activity"        => "CheckingModifications",
+      "lastBuildStatus" => "Success",
+      "lastBuildLabel"  => "f80058377a5b0d2203010aa6d430fd0686063b9e",
+      "lastBuildTime"   => "2014-03-21T17:12:36.0000000-0400",
+      "webUrl"          => "http://server/projects/pg-vmdb"
+    }
+  end
+
+  context ".update_from_xml" do
+    it "No Projects" do
+      described_class.any_instance.should_receive(:update_from_xml).with(data)
+
+      described_class.update_from_xml(1, data)
     end
 
-    it "#status" do
-      described_class.new.status.should == :green
-    end
-    pending "#status - :rebuilding"
-    pending "#status - :failure"
+    it "Existing Project" do
+      described_class.create!(:server_id => 1, :name => "pg-vmdb")
+      described_class.any_instance.should_receive(:update_from_xml).with(data)
 
-    it "#data" do
-      described_class.new.data.should == [
-        ["trunk",
-          {
-            "pg" => {
-              "vmdb_metrics" => {
-                :name       => "pg-vmdb_metrics",
-                :status     => :success,
-                :activity   => :building,
-                :url        => "http://cruisecontrol-metrics.manageiq.com:3333/projects/pg-vmdb_metrics",
-                :last_built => "2013-01-19 03:19:10 -0500",
-                :version    => "trunk",
-                :db         => "pg",
-                :category   => "vmdb_metrics"
-              }
-            }
-          }
-        ]
-      ]
+      described_class.update_from_xml(1, data)
+
+      expect(described_class.count).to eq(1)
     end
   end
 
-  context "when server is down" do
-    shared_examples_for "server is down" do
-      it "#data" do
-        described_class.new.data.should == [
-          ["",
-            {
-              "http://cruisecontrol/XmlStatusReport.aspx" => {
-                nil => {
-                  :name       => nil,
-                  :status     => :down,
-                  :activity   => nil,
-                  :url        => "http://cruisecontrol/XmlStatusReport.aspx",
-                  :last_built => nil,
-                  :version    => "",
-                  :db         => "http://cruisecontrol/XmlStatusReport.aspx",
-                  :category   => nil
-                }
-              }
-            }
-          ]
-        ]
-      end
+  it "#update_from_xml" do
+    described_class.update_from_xml(1, data)
 
-      it "#status" do
-        described_class.new.status.should == :gray
-      end
-    end
-
-    before do
-      described_class.any_instance.stub(:urls => ["http://cruisecontrol/XmlStatusReport.aspx"])
-    end
-
-    context "and raises an exception" do
-      before do
-        described_class.any_instance.stub(:open).and_raise(StandardError)
-      end
-
-      include_examples "server is down"
-    end
-
-    context "and returns a 500 error" do
-      before do
-        described_class.any_instance.stub(:open => mock(:read => "500 Internal Server Error"))
-      end
-
-      include_examples "server is down"
-    end
+    expect(described_class.first.name).to       eq("pg-vmdb")
+    expect(described_class.first.activity).to   eq("checkingmodifications")
+    expect(described_class.first.category).to   eq("vmdb")
+    expect(described_class.first.db).to         eq("pg")
+    expect(described_class.first.last_built).to eq("2014-03-21 21:12:36.000000")
+    expect(described_class.first.last_sha).to   eq("f8005837")
+    expect(described_class.first.status).to     eq("success")
+    expect(described_class.first.version).to    eq("upstream")
+    expect(described_class.first.web_url).to    eq("http://server/projects/pg-vmdb")
   end
 end

@@ -1,77 +1,55 @@
-class Project
+class Project < ActiveRecord::Base
+  CATEGORIES_PATH = Rails.root.join("config", "project_categories.yml")
 
-  def status
-    @status ||= begin
-      status = :green
-      filtered_raw_data.each do |d|
-        status = worst_status(status, RAW_STATUS_TO_STATUS[d[:status]])
-      end
-      status
-    end
-  end
-
-  def data
-    @data ||= begin
-      data = filtered_raw_data.each_with_object({}) do |d, h|
-        h.store_path(d[:version], d[:db], d[:category], d)
-      end
-      data.sort.reverse
-    end
-  end
-
-  def categories
+  def self.categories
     @categories ||= YAML.load_file(CATEGORIES_PATH)
+  end
+
+  def self.update_from_xml(server_id, data)
+    attributes = {:name => data["name"], :server_id => server_id}
+    project    = Project.where(attributes).first || Project.create(attributes.merge(:aggregate_status => true))
+
+    project.update_from_xml(data)
+  end
+
+  def update_from_xml(data)
+    activity, status      = activity_and_status(data["activity"], data["lastBuildStatus"])
+    db, version, category = parse_name_parts(data["name"])
+
+    update_attributes(
+      :activity   => activity,
+      :category   => category,
+      :db         => db,
+      :last_built => parse_last_built_time(data["lastBuildTime"]),
+      :status     => status.to_s,
+      :last_sha   => data["lastBuildLabel"].to_s.slice(0, 8),
+      :version    => version,
+      :web_url    => data["webUrl"].to_s,
+    )
   end
 
   private
 
-  CATEGORIES_PATH = Rails.root.join("config", "project_categories.yml")
-
-  def raw_data
-    @raw_data ||= begin
-      data = []
-
-      CcXml # Eager load the constant so that it works with threading.
-      threads = []
-      Server.all.each do |server|
-        threads << Thread.new { data << CcXml.new(get_xml(server.url)).parse }
-      end
-      threads.map(&:join)
-
-      data.flatten
-    end
+  def parse_last_built_time(time)
+    last_built = Time.parse(Time.parse(time).asctime) unless time.blank? # Hack for old cruise control machines with no timezone in string
+    last_built.try(:year) == 1970 ? nil : last_built
   end
 
-  def filtered_raw_data
-    @filtered_raw_data ||= raw_data.select { |d| d[:category].nil? || categories.include?(d[:category]) }
+  def activity_and_status(activity, status)
+    activity = activity.to_s.downcase.to_sym
+    activity = :queued if activity == :unknown
+
+    status = status.to_s.downcase.to_sym
+    status = :failure    if status == :unknown
+    status = :rebuilding if status == :failure && activity == :building
+
+    [activity, status]
   end
 
-  def get_xml(url)
-    server_down = false
-    xml = nil
+  def parse_name_parts(name)
+    name_parts = name.split("-")
+    name_parts.length == 2 ? name_parts.insert(1, "upstream") : name_parts[1] = "#{name_parts[1].gsub("_", ".")}.x"
 
-    require 'open-uri'
-    begin
-      xml = open(url, :read_timeout => 30).read
-      server_down = true if xml.include?("500 Internal Server Error")
-    rescue
-      server_down = true
-    end
-    xml = CcXml.server_down_xml(url) if server_down
-
-    xml
-  end
-
-  STATUSES = [:green, :yellow, :red, :gray]
-
-  RAW_STATUS_TO_STATUS = Hash.new(:green).merge(
-    :down       => :gray,
-    :failure    => :red,
-    :rebuilding => :yellow
-  )
-
-  def worst_status(x, y)
-    worst_status_index = [STATUSES.index(x), STATUSES.index(y)].max
-    STATUSES[worst_status_index]
+    name_parts
   end
 end
