@@ -1,0 +1,15 @@
+<colgroup>
+  <col style="width: 10%" />
+  <col style="width: 10%" />
+  <% @categories.length.times do %>
+    <col style="width: <%= 80 / @categories.length %>%" />
+  <% end %>
+</colgroup>
+<thead>
+  <tr style="height: 5%">
+    <th id="countdown" colspan=2 />
+    <% @categories.each do |h| %>
+      <th><%= h.titleize %></th>
+    <% end %>
+  </tr>
+</thead>
