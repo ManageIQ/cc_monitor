@@ -1,4 +1,11 @@
+require 'sidekiq/web'
+require 'sidetiq/web'
+
 CcMonitor::Application.routes.draw do
+  mount Sidekiq::Web, :at => "/sidekiq"
+
+  RefreshWorker # Eager load the RefreshWorker to ensure the Sidetiq job is scheduled
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

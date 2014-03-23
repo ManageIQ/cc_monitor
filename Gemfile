@@ -51,3 +51,9 @@ gem 'nokogiri'
 gem 'thin'
 gem 'more_core_extensions'
 gem 'foreman'
+
+# Sidekiq Worker
+gem 'sidekiq'
+gem 'sidetiq'
+gem 'sinatra', :require => false
+gem 'slim'
