@@ -9,7 +9,7 @@ class Project < ActiveRecord::Base
   def self.data
     Project.order(:version, :db).reverse.each_with_object({}) do |project, hash|
       hash.store_path(project.version, project.db, project.category, project)
-      if project.aggregate_status
+      if project.included_in_status?
         hash.store_path(project.version, :status, worst_status(hash.fetch_path(project.version, :status), project.status))
         hash.store_path(:status, worst_status(hash[:status], project.status))
       end
@@ -18,7 +18,7 @@ class Project < ActiveRecord::Base
 
   def self.update_from_xml(server_id, data)
     attributes = {:name => data["name"], :server_id => server_id}
-    project    = Project.where(attributes).first || Project.create(attributes.merge(:aggregate_status => true))
+    project    = Project.where(attributes).first || Project.create(attributes.merge(:included_in_status => true))
 
     project.update_from_xml(data)
   end

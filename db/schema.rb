@@ -16,17 +16,17 @@ ActiveRecord::Schema.define(:version => 20140321191701) do
   create_table "projects", :force => true do |t|
     t.string   "name"
     t.string   "activity"
-    t.boolean  "aggregate_status"
     t.string   "category"
     t.string   "db"
+    t.boolean  "included_in_status"
     t.string   "last_built"
     t.string   "last_sha"
     t.string   "status"
     t.string   "version"
     t.string   "web_url"
     t.integer  "server_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   create_table "servers", :force => true do |t|
