@@ -1,8 +1,19 @@
 class Project < ActiveRecord::Base
   CATEGORIES_PATH = Rails.root.join("config", "project_categories.yml")
+  STATUS_ORDER    = ["success", "rebuilding", "failure", "down"]
 
   def self.categories
     @categories ||= YAML.load_file(CATEGORIES_PATH)
+  end
+
+  def self.data
+    Project.order(:version, :db).reverse.each_with_object({}) do |project, hash|
+      hash.store_path(project.version, project.db, project.category, project)
+      if project.aggregate_status
+        hash.store_path(project.version, :status, worst_status(hash.fetch_path(project.version, :status), project.status))
+        hash.store_path(:status, worst_status(hash[:status], project.status))
+      end
+    end
   end
 
   def self.update_from_xml(server_id, data)
@@ -29,6 +40,11 @@ class Project < ActiveRecord::Base
   end
 
   private
+
+  def self.worst_status(*args)
+    STATUS_ORDER[args.collect { |arg| STATUS_ORDER.index(arg).to_i }.max]
+  end
+  private_class_method :worst_status
 
   def parse_last_built_time(time)
     last_built = Time.parse(Time.parse(time).asctime) unless time.blank? # Hack for old cruise control machines with no timezone in string
