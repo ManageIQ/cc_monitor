@@ -1,4 +1,6 @@
 class Project < ActiveRecord::Base
+  belongs_to :server
+
   CATEGORIES_PATH = Rails.root.join("config", "project_categories.yml")
   STATUS_ORDER    = ["success", "rebuilding", "failure", "down"]
 
@@ -32,7 +34,7 @@ class Project < ActiveRecord::Base
       :category   => category,
       :db         => db,
       :last_built => parse_last_built_time(data["lastBuildTime"]),
-      :status     => status.to_s,
+      :status     => status,
       :last_sha   => data["lastBuildLabel"].to_s.slice(0, 8),
       :version    => version,
       :web_url    => data["webUrl"].to_s,
@@ -52,12 +54,12 @@ class Project < ActiveRecord::Base
   end
 
   def activity_and_status(activity, status)
-    activity = activity.to_s.downcase.to_sym
-    activity = :queued if activity == :unknown
+    activity = activity.to_s.downcase
+    activity = "queued" if activity == "unknown"
 
-    status = status.to_s.downcase.to_sym
-    status = :failure    if status == :unknown
-    status = :rebuilding if status == :failure && activity == :building
+    status = status.to_s.downcase
+    status = "failure"    if status == "unknown"
+    status = "rebuilding" if status == "failure" && activity == "building"
 
     [activity, status]
   end
