@@ -2,32 +2,35 @@
   <%= render 'header' %>
   <% @data.each do |version, db_type| %>
     <% next if version == :status %>
-    <th rowspan=<%= db_type.length - 1 %>><%= version.to_s.humanize %></th>
-    <% db_type.each do |db, projects| %>
-      <% next if db == :status %>
-      <th><%= db.to_s.upcase %></th>
-      <% @categories.each do |category| %>
-        <% c = projects[category] %>
-        <% if c.blank? %>
-          <td />
-        <% else %>
-          <td class="<%= c.status %>">
-            <% name = c[:last_built].blank? ? "Never Built" : "#{time_ago_in_words(c[:last_built])} ago".capitalize %>
-            <%= link_to name, c.web_url, :target => "_blank" %>
-            </br>
-            <%= c.last_sha %>
-            <% if c.activity == :building %>
-              <div class="icon">
-                <%= image_tag "spinner_#{c[:status]}.gif" %>
-              </div>
-            <% elsif c.activity == :queued %>
-              <div class="icon">
-                <%= image_tag "queued.png" %>
-              </div>
-            <% end %>
-          </td>
+    <% db_type.each_with_index do |(db, projects), i| %>
+    <% next if db == :status %>
+      <tr>
+        <% if i == 0 %>
+          <th rowspan=<%= db_type.length - 1 %>><%= version.to_s.humanize %></th>
         <% end %>
-      <% end %>
+        <th><%= db.to_s.upcase %></th>
+        <% @categories.each do |category| %>
+          <% c = projects[category] %>
+          <% if c.blank? %>
+            <td></td>
+          <% else %>
+            <td class="<%= c.status %>">
+              <% name = c[:last_built].blank? ? "Never Built" : "#{time_ago_in_words(c[:last_built])} ago".capitalize %>
+              <%= link_to name, c.web_url, :target => "_blank" %>
+              <br />
+              <%= c.last_sha %>
+              <% if c.activity == "building" %>
+                <div class="icon">
+                  <%= image_tag "spinner_#{c[:status]}.gif" %>
+                </div>
+              <% elsif c.activity == "queued" %>
+                <div class="icon">
+                  <%= image_tag "queued.png" %>
+                </div>
+              <% end %>
+            </td>
+          <% end %>
+        <% end %>
       </tr>
     <% end %>
   <% end %>
