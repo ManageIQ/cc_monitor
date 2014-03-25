@@ -10,10 +10,10 @@ class Project < ActiveRecord::Base
 
   def self.data
     Project.order(:version, :db).reverse.each_with_object({}) do |project, hash|
-      hash.store_path(project.version, project.db, project.category, project)
+      hash.store_path("versions", project.version, "dbs", project.db, project.category, project)
       if project.included_in_status?
-        hash.store_path(project.version, :status, worst_status(hash.fetch_path(project.version, :status), project.status))
-        hash.store_path(:status, worst_status(hash[:status], project.status))
+        hash.store_path("versions", project.version, "status", worst_status(hash.fetch_path(project.version, "status"), project.status))
+        hash.store_path("status", worst_status(hash["status"], project.status))
       end
     end
   end

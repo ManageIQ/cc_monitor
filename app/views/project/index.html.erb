@@ -1,13 +1,11 @@
 <table id="projects">
   <% num_rows = @data.select { |db, _| db != :status }.inject(0) { |n, (_, projects)| n + projects.length - 1 } %>
   <%= render 'header' %>
-  <% @data.each do |version, db_type| %>
-    <% next if version == :status %>
-    <% db_type.each_with_index do |(db, projects), i| %>
-    <% next if db == :status %>
+  <% @data["versions"].each do |version, db_type| %>
+    <% db_type["dbs"].each_with_index do |(db, projects), i| %>
       <tr style="height: <%= 95 / num_rows %>%"><%# 95% = 100% - header row height (5%) %>
         <% if i == 0 %>
-          <th rowspan=<%= db_type.length - 1 %>><%= version.to_s.humanize %></th>
+          <th rowspan=<%= db_type["dbs"].length %>><%= version.to_s.humanize %></th>
         <% end %>
         <th><%= db.to_s.upcase %></th>
         <% @categories.each do |category| %>
@@ -16,13 +14,13 @@
             <td></td>
           <% else %>
             <td class="<%= c.status %>">
-              <% name = c[:last_built].blank? ? "Never Built" : "#{time_ago_in_words(c[:last_built])} ago".capitalize %>
+              <% name = c.last_built.blank? ? "Never Built" : "#{time_ago_in_words(c.last_built)} ago".capitalize %>
               <%= link_to name, c.web_url, :target => "_blank" %>
               <br />
               <%= c.last_sha %>
               <% if c.activity == "building" %>
                 <div class="icon">
-                  <%= image_tag "spinner_#{c[:status]}.gif" %>
+                  <%= image_tag "spinner_#{c.status}.gif" %>
                 </div>
               <% elsif c.activity == "queued" %>
                 <div class="icon">
