@@ -1,10 +1,11 @@
 <table id="projects">
+  <% num_rows = @data.select { |db, _| db != :status }.inject(0) { |n, (_, projects)| n + projects.length - 1 } %>
   <%= render 'header' %>
   <% @data.each do |version, db_type| %>
     <% next if version == :status %>
     <% db_type.each_with_index do |(db, projects), i| %>
     <% next if db == :status %>
-      <tr>
+      <tr style="height: <%= 95 / num_rows %>%"><%# 95% = 100% - header row height (5%) %>
         <% if i == 0 %>
           <th rowspan=<%= db_type.length - 1 %>><%= version.to_s.humanize %></th>
         <% end %>

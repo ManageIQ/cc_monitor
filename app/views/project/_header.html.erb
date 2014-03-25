@@ -2,7 +2,7 @@
   <col style="width: 10%" />
   <col style="width: 10%" />
   <% @categories.length.times do %>
-    <col style="width: <%= 80 / @categories.length %>%" />
+    <col style="width: <%= 80 / @categories.length %>%" /><%# 80% = 100% - leading cells width (10% + 10%) %>
   <% end %>
 </colgroup>
 <thead>
