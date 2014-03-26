@@ -4,9 +4,9 @@
     <% db_type["dbs"].each_with_index do |(db, projects), i| %>
       <tr style="height: <%= 95 / @num_rows %>%"><%# 95% = 100% - header row height (5%) %>
         <% if i == 0 %>
-          <th rowspan=<%= db_type["dbs"].length %>><%= version.to_s.humanize %></th>
+          <th rowspan=<%= db_type["dbs"].length %>><%= version.humanize %></th>
         <% end %>
-        <th><%= db.to_s.upcase %></th>
+        <th><%= db.upcase %></th>
         <% @categories.each do |category| %>
           <% c = projects[category] %>
           <% if c.blank? %>
