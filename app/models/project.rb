@@ -8,14 +8,9 @@ class Project < ActiveRecord::Base
     @categories ||= YAML.load_file(CATEGORIES_PATH)
   end
 
-  def self.data
-    Project.order(:version, :db).reverse.each_with_object({}) do |project, hash|
-      hash.store_path("versions", project.version, "dbs", project.db, project.category, project)
-      if project.included_in_status?
-        hash.store_path("versions", project.version, "status", worst_status(hash.fetch_path(project.version, "status"), project.status))
-        hash.store_path("status", worst_status(hash["status"], project.status))
-      end
-    end
+  def self.data(version = nil)
+    version ||= Project.all.collect(&:version).uniq
+    build_hash(Project.where(:version => version).order(:version, :db))
   end
 
   def self.update_from_xml(server_id, data)
@@ -42,6 +37,17 @@ class Project < ActiveRecord::Base
   end
 
   private
+
+  def self.build_hash(projects)
+    projects.reverse.each_with_object({}) do |project, hash|
+      hash.store_path("versions", project.version, "dbs", project.db, project.category, project)
+      if project.included_in_status?
+        hash.store_path("versions", project.version, "status", worst_status(hash.fetch_path(project.version, "status"), project.status))
+        hash.store_path("status", worst_status(hash["status"], project.status))
+      end
+    end
+  end
+  private_class_method :build_hash
 
   def self.worst_status(*args)
     STATUS_ORDER[args.collect { |arg| STATUS_ORDER.index(arg).to_i }.max]
