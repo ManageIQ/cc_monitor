@@ -51,6 +51,7 @@ html, body {
 
 #projects td.failure {
 	background-color: red;
+	color: white;
 }
 
 #projects td.rebuilding {
