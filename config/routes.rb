@@ -58,7 +58,8 @@ CcMonitor::Application.routes.draw do
   # root :to => 'welcome#index'
   root :to => 'project#index'
 
-  get '/api(.:format)'	=> 'api#show', :format => 'json'
+  get '/api(.:format)'     => 'project#index', :format => 'json'
+  get '/project(.:format)' => 'project#index'
 
   # See how all your routes lay out with "rake routes"
 
