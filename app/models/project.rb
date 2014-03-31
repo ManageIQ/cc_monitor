@@ -9,7 +9,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.data(version = nil)
-    version ||= Project.all.collect(&:version).uniq
+    version = Project.all.collect(&:version).uniq if version.blank?
     build_hash(Project.where(:version => version).order(:version, :db))
   end
 
