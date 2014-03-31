@@ -9,8 +9,12 @@ class Project < ActiveRecord::Base
   end
 
   def self.data(version = nil)
-    version = Project.all.collect(&:version).uniq if version.blank?
+    version = versions if version.blank?
     build_hash(Project.where(:version => version).order(:version, :db))
+  end
+
+  def self.versions
+    Project.all.collect(&:version).uniq
   end
 
   def self.update_from_xml(server_id, data)
