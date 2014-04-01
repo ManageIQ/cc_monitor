@@ -25,7 +25,7 @@ class Server < ActiveRecord::Base
     server_status, xml = raw_xml
 
     if server_status == :down
-      projects.update_all(:status => "down")
+      projects.update_all(:status => "down", :activity => "down")
       return
     end
 
