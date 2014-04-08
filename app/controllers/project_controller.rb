@@ -6,24 +6,33 @@ class ProjectController < ApplicationController
   end
 
   def api
-    @data = Project.data(version)
-    render :json => (@data[key] || @data)
+    versions, version, status = path_arguments
+    if versions
+      if version
+        if status
+          render :json => Project.data(version)[status]
+        else
+          render :json => Project.data(version)
+        end
+      else
+        render :json => Project.versions
+      end
+    elsif status
+      render :json => Project.data[status]
+    else
+      render :json => Project.data
+    end
   end
 
   private
 
-  def version
-    raw_path.last
-  end
-
-  def key
-    raw_path.first
-  end
-
-  def raw_path
+  def path_arguments
     @raw_path ||= begin
       path_array = request.fullpath.split("api").last.split("/").delete_blanks
-      [path_array.delete("status"), path_array.first]
+      status     = path_array.delete("status")
+      versions   = path_array.delete("versions")
+      version    = path_array.first
+      [versions, version, status]
     end
   end
 
