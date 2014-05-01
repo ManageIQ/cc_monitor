@@ -50,10 +50,10 @@ end
 gem 'nokogiri'
 gem 'thin'
 gem 'more_core_extensions'
-gem 'foreman'
+gem 'foreman', '~> 0.64.0' # v0.65.0 breaks support for the older upstart on RHEL 6
 
 # Sidekiq Worker
-gem 'sidekiq'
+gem 'sidekiq', '~> 2.17'
 gem 'sidetiq'
 gem 'sinatra', :require => false
 gem 'slim'
