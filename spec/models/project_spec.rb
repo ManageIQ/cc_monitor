@@ -29,6 +29,67 @@ describe Project do
     end
   end
 
+  context "sha_url" do
+    it "should use upstream sha url" do
+      subject = described_class.create!(
+        :server_id => 1,
+        :name      => "pg-vmdb",
+        :version   => "upstream",
+        :last_sha  => "555aaa")
+      expect(subject.dynamic_sha_url).to eq("http://github.com/ManageIQ/manageiq/commit/555aaa")
+    end
+
+    it "should not have no downstream sha url" do
+      subject = described_class.create!(
+        :server_id => 1,
+        :name      => "pg-5.2-vmdb",
+        :version   => "5.2",
+        :last_sha  => "555aaa")
+      expect(subject.dynamic_sha_url).to eq(
+        "https://code.engineering.redhat.com/gerrit/gitweb?p=cfme.git;a=commitdiff;h=555aaa")
+    end
+  end
+
+  context "web_url" do
+    it "should support metrics dynamic web url" do
+      subject = described_class.create!(
+        :server_id  => 1,
+        :name       => "pg-vmdb_metrics",
+        :category   => "vmdb_metrics",
+        :web_url    => "http://www.site.com/",
+        :last_built => "abc123")
+      expect(subject.dynamic_web_url).to eq("http://www.site.com/abc123/artifacts/output/index.html")
+    end
+    it "should support brakeman dynamic web url" do
+      subject = described_class.create!(
+        :server_id  => 1,
+        :name       => "pg-brakeman",
+        :category   => "brakeman",
+        :web_url    => "http://www.site.com/",
+        :last_built => "abc123")
+      expect(subject.dynamic_web_url).to eq("http://www.site.com/abc123/artifacts/brakeman.html")
+    end
+    it "should support regular dynamic web url" do
+      subject = described_class.create!(
+        :server_id  => 1,
+        :name       => "pg-vmdb",
+        :category   => "vmdb",
+        :web_url    => "http://www.site.com/",
+        :last_built => "abc123")
+      expect(subject.dynamic_web_url).to eq("http://www.site.com/")
+    end
+  end
+
+  context "parse_name_parts" do
+    it "should parse upstream name" do
+      expect(subject.send(:parse_name_parts, "pg-vmdb")).to eq(%w(pg upstream vmdb))
+    end
+
+    it "should extend version number for downstream projects" do
+      expect(subject.send(:parse_name_parts, "pg-5.2-vmdb")).to eq(%w(pg 5.2.x vmdb))
+    end
+  end
+
   it "#update_from_xml" do
     described_class.update_from_xml(1, data)
 

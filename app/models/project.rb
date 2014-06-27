@@ -4,6 +4,25 @@ class Project < ActiveRecord::Base
   CATEGORIES_PATH = Rails.root.join("config", "project_categories.yml")
   STATUS_ORDER    = ["success", "rebuilding", "failure", "down"]
 
+  def dynamic_web_url
+    case category
+    when "vmdb_metrics"
+      "#{web_url}#{last_built}/artifacts/output/index.html"
+    when "brakeman"
+      "#{web_url}#{last_built}/artifacts/brakeman.html"
+    else
+      "#{web_url}"
+    end
+  end
+
+  def dynamic_sha_url
+    if version == "upstream"
+      "http://github.com/ManageIQ/manageiq/commit/#{last_sha}"
+    else
+      "https://code.engineering.redhat.com/gerrit/gitweb?p=cfme.git;a=commitdiff;h=#{last_sha}"
+    end
+  end
+
   def self.categories
     @categories ||= YAML.load_file(CATEGORIES_PATH)
   end
