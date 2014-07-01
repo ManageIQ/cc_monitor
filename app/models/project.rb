@@ -2,14 +2,18 @@ class Project < ActiveRecord::Base
   belongs_to :server
 
   CATEGORIES_PATH = Rails.root.join("config", "project_categories.yml")
-  STATUS_ORDER    = ["success", "rebuilding", "failure", "down"]
+  STATUS_ORDER    = %w(success rebuilding failure down)
+
+  def artifacts_directory
+    "#{web_url.gsub("/projects", "/builds")}/#{last_sha}/artifacts"
+  end
 
   def dynamic_web_url
     case category
     when "vmdb_metrics"
-      "#{web_url}/#{last_sha}/artifacts/output/index.html"
+      "#{artifacts_directory}/output/index.html"
     when "brakeman"
-      "#{web_url}/#{last_sha}/artifacts/brakeman.html"
+      "#{artifacts_directory}/brakeman.html"
     else
       "#{web_url}"
     end

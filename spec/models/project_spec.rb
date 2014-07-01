@@ -56,18 +56,18 @@ describe Project do
         :server_id => 1,
         :name      => "pg-upstream-vmdb_metrics",
         :category  => "vmdb_metrics",
-        :web_url   => "http://www.site.com",
+        :web_url   => "http://s.com/projects/mets",
         :last_sha  => "555aaa5555aaaa")
-      expect(subject.dynamic_web_url).to eq("http://www.site.com/555aaa5555aaaa/artifacts/output/index.html")
+      expect(subject.dynamic_web_url).to eq("http://s.com/builds/mets/555aaa5555aaaa/artifacts/output/index.html")
     end
     it "should support brakeman dynamic web url" do
       subject = described_class.create!(
         :server_id => 1,
         :name      => "pg-upstream-brakeman",
         :category  => "brakeman",
-        :web_url   => "http://www.site.com",
+        :web_url   => "http://s.com/projects/brakeman",
         :last_sha  => "555aaa5555aaaa")
-      expect(subject.dynamic_web_url).to eq("http://www.site.com/555aaa5555aaaa/artifacts/brakeman.html")
+      expect(subject.dynamic_web_url).to eq("http://s.com/builds/brakeman/555aaa5555aaaa/artifacts/brakeman.html")
     end
     it "should support regular dynamic web url" do
       subject = described_class.create!(
