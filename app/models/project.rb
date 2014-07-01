@@ -94,9 +94,15 @@ class Project < ActiveRecord::Base
   end
 
   def parse_name_parts(name)
-    name_parts = name.split("-")
-    name_parts.length == 2 ? name_parts.insert(1, "upstream") : name_parts[1] = "#{name_parts[1].gsub("_", ".")}.x"
+    db, version, category = name.split("-") # Project name: pg-upstream-vmdb or pg-52x-lib or pg-5_2-metrics
 
-    name_parts
+    category = "vmdb_metrics" if category == "metrics"
+    version  = case version
+               when "upstream", "downstream" then version
+               when /_/                      then "#{version.gsub("_", ".")}.x" # Change "5_2" => "5.2.x"
+               else                               version.split("").join(".")   # Change "52x" => "5.2.x"
+               end
+
+    [db, version, category]
   end
 end
