@@ -3,6 +3,6 @@
 - migrations
 - lib
 - replication
-- vmdb_metrics
 - automation
+- vmdb_metrics
 - brakeman
