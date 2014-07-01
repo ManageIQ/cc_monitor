@@ -7,9 +7,9 @@ class Project < ActiveRecord::Base
   def dynamic_web_url
     case category
     when "vmdb_metrics"
-      "#{web_url}#{last_built}/artifacts/output/index.html"
+      "#{web_url}/#{last_sha}/artifacts/output/index.html"
     when "brakeman"
-      "#{web_url}#{last_built}/artifacts/brakeman.html"
+      "#{web_url}/#{last_sha}/artifacts/brakeman.html"
     else
       "#{web_url}"
     end
@@ -17,10 +17,14 @@ class Project < ActiveRecord::Base
 
   def dynamic_sha_url
     if version == "upstream"
-      "http://github.com/ManageIQ/manageiq/commit/#{last_sha}"
+      "http://github.com/ManageIQ/manageiq/commit/#{short_sha}"
     else
       "https://code.engineering.redhat.com/gerrit/gitweb?p=cfme.git;a=commitdiff;h=#{last_sha}"
     end
+  end
+
+  def short_sha
+    last_sha.to_s.slice(0, 8)
   end
 
   def self.categories
@@ -53,7 +57,7 @@ class Project < ActiveRecord::Base
       :db         => db,
       :last_built => parse_last_built_time(data["lastBuildTime"]),
       :status     => status,
-      :last_sha   => data["lastBuildLabel"].to_s.slice(0, 8),
+      :last_sha   => data["lastBuildLabel"].to_s,
       :version    => version,
       :web_url    => data["webUrl"].to_s,
     )
