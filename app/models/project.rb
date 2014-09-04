@@ -8,15 +8,13 @@ class Project < ActiveRecord::Base
     "#{web_url.gsub("/projects", "/builds")}/#{last_sha}/artifacts"
   end
 
-  def dynamic_web_url
-    case category
-    when "vmdb_metrics"
-      "#{artifacts_directory}/output/index.html"
-    when "brakeman"
-      "#{artifacts_directory}/brakeman.html"
-    else
-      "#{web_url}"
-    end
+  def presentation_url
+    super
+      .to_s
+      .gsub("$artifacts_directory", artifacts_directory)
+      .gsub("$web_url",             web_url)
+      .gsub("$short_last_sha",      short_last_sha)
+      .gsub("$last_sha",            last_sha)
   end
 
   def commit_url
@@ -27,7 +25,7 @@ class Project < ActiveRecord::Base
   end
 
   def short_last_sha
-    last_sha.to_s.slice(0, 8)
+    last_sha.to_s[0, 8]
   end
 
   def self.categories

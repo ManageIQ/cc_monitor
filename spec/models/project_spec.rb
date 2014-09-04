@@ -49,33 +49,25 @@ describe Project do
     end
   end
 
-  context "web_url" do
-    it "should support metrics dynamic web url" do
+  context "#presentation_url" do
+    it "should allow substituting $artifacts_directory" do
       subject = described_class.create!(
-        :server_id => 1,
-        :name      => "pg-upstream-vmdb_metrics",
-        :category  => "vmdb_metrics",
-        :web_url   => "http://s.com/projects/mets",
-        :last_sha  => "555aaa5555aaaa")
-      expect(subject.dynamic_web_url).to eq("http://s.com/builds/mets/555aaa5555aaaa/artifacts/output/index.html")
+        :web_url          => "http://s.com/projects/xyz",
+        :presentation_url => "$artifacts_directory/output/index.html",
+        :last_sha         => "a7bc38b1010cf61019d78b65e09215ddc6fac42d"
+      )
+      expect(subject.presentation_url).to eq(
+        "http://s.com/builds/xyz/a7bc38b1010cf61019d78b65e09215ddc6fac42d/artifacts/output/index.html"
+      )
     end
-    it "should support brakeman dynamic web url" do
+
+    it "should allow substituting $web_url" do
       subject = described_class.create!(
-        :server_id => 1,
-        :name      => "pg-upstream-brakeman",
-        :category  => "brakeman",
-        :web_url   => "http://s.com/projects/brakeman",
-        :last_sha  => "555aaa5555aaaa")
-      expect(subject.dynamic_web_url).to eq("http://s.com/builds/brakeman/555aaa5555aaaa/artifacts/brakeman.html")
-    end
-    it "should support regular dynamic web url" do
-      subject = described_class.create!(
-        :server_id => 1,
-        :name      => "pg-upstream-vmdb",
-        :category  => "vmdb",
-        :web_url   => "http://www.site.com/",
-        :last_sha  => "555aaa5555aaaa")
-      expect(subject.dynamic_web_url).to eq("http://www.site.com/")
+        :web_url          => "http://s.com/projects/xyz",
+        :presentation_url => "$web_url",
+        :last_sha         => "a7bc38b1010cf61019d78b65e09215ddc6fac42d"
+      )
+      expect(subject.presentation_url).to eq("http://s.com/projects/xyz")
     end
   end
 
@@ -87,6 +79,7 @@ describe Project do
     it "should support versions without periods or an x" do
       expect(subject.send(:parse_name_parts, "pg-52x-vmdb")).to eq(%w(pg 5.2.x vmdb))
     end
+
     it "should support versions with underscores" do
       expect(subject.send(:parse_name_parts, "pg-5_2-vmdb")).to eq(%w(pg 5.2.x vmdb))
     end

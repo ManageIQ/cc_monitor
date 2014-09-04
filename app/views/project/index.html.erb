@@ -14,7 +14,7 @@
           <% else %>
             <td class="<%= c.status %>">
               <% name = c.last_built.blank? ? "Never Built" : "#{time_ago_in_words(c.last_built)} ago".capitalize %>
-              <%= link_to name, c.dynamic_web_url, :target => "_blank" %>
+              <%= link_to name, c.presentation_url, :target => "_blank" %>
               <br /><br />
               <%= link_to c.short_last_sha, c.commit_url, :target => "_blank" %>
               <% if c.activity == "building" %>
