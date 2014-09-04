@@ -29,24 +29,23 @@ describe Project do
     end
   end
 
-  context "sha_url" do
-    it "should use upstream sha url" do
+  context "#commit_url" do
+    it "should allow substituting $short_last_sha" do
       subject = described_class.create!(
-        :server_id => 1,
-        :name      => "pg-upstream-vmdb",
-        :version   => "upstream",
-        :last_sha  => "555aaa5555aaaa")
-      expect(subject.dynamic_sha_url).to eq("http://github.com/ManageIQ/manageiq/commit/555aaa55")
+        :last_sha   => "a7bc38b1010cf61019d78b65e09215ddc6fac42d",
+        :commit_url => "http://github.com/Organization/repo/commit/$short_last_sha"
+      )
+      expect(subject.commit_url).to eq("http://github.com/Organization/repo/commit/a7bc38b1")
     end
 
-    it "should not have no downstream sha url" do
+    it "should allow substituting $last_sha" do
       subject = described_class.create!(
-        :server_id => 1,
-        :name      => "pg-5.2-vmdb",
-        :version   => "5.2",
-        :last_sha  => "555aaa5555aaaa")
-      expect(subject.dynamic_sha_url).to eq(
-        "https://code.engineering.redhat.com/gerrit/gitweb?p=cfme.git;a=commitdiff;h=555aaa5555aaaa")
+        :last_sha   => "a7bc38b1010cf61019d78b65e09215ddc6fac42d",
+        :commit_url => "https://gerrit_server/gerrit/gitweb?p=repo.git;a=commitdiff;h=$last_sha"
+      )
+      expect(subject.commit_url).to eq(
+        "https://gerrit_server/gerrit/gitweb?p=repo.git;a=commitdiff;h=a7bc38b1010cf61019d78b65e09215ddc6fac42d"
+      )
     end
   end
 

@@ -19,15 +19,14 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def dynamic_sha_url
-    if version == "upstream"
-      "http://github.com/ManageIQ/manageiq/commit/#{short_sha}"
-    else
-      "https://code.engineering.redhat.com/gerrit/gitweb?p=cfme.git;a=commitdiff;h=#{last_sha}"
-    end
+  def commit_url
+    super
+      .to_s
+      .gsub("$short_last_sha", short_last_sha)
+      .gsub("$last_sha",       last_sha)
   end
 
-  def short_sha
+  def short_last_sha
     last_sha.to_s.slice(0, 8)
   end
 

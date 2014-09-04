@@ -16,7 +16,7 @@
               <% name = c.last_built.blank? ? "Never Built" : "#{time_ago_in_words(c.last_built)} ago".capitalize %>
               <%= link_to name, c.dynamic_web_url, :target => "_blank" %>
               <br /><br />
-              <%= link_to c.short_sha, c.dynamic_sha_url, :target => "_blank" %>
+              <%= link_to c.short_last_sha, c.commit_url, :target => "_blank" %>
               <% if c.activity == "building" %>
                 <div class="icon">
                   <%= image_tag "spinner_#{c.status}.gif" %>
