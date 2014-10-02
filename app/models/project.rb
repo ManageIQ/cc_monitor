@@ -5,13 +5,21 @@ class Project < ActiveRecord::Base
   STATUS_ORDER    = %w(success rebuilding failure down)
 
   def artifacts_directory
-    "#{web_url.gsub("/projects", "/builds")}/#{last_sha}/artifacts"
+    "#{build_url}/#{last_sha}/artifacts"
+  end
+
+  def build_url
+    web_url.gsub("/projects", "/builds")
+  end
+
+  def cc_build_url
+    "$build_url/$last_sha"
   end
 
   def presentation_url
-    super
-      .to_s
+    (super || cc_build_url)
       .gsub("$artifacts_directory", artifacts_directory)
+      .gsub("$build_url",           build_url)
       .gsub("$web_url",             web_url)
       .gsub("$short_last_sha",      short_last_sha)
       .gsub("$last_sha",            last_sha)

@@ -69,6 +69,14 @@ describe Project do
       )
       expect(subject.presentation_url).to eq("http://s.com/projects/xyz")
     end
+
+    it "empty should default to the build_url" do
+      subject = described_class.create!(
+        :web_url          => "http://s.com/projects/xyz",
+        :last_sha         => "a7bc38b1010cf61019d78b65e09215ddc6fac42d"
+      )
+      expect(subject.presentation_url).to eq("http://s.com/builds/xyz/a7bc38b1010cf61019d78b65e09215ddc6fac42d")
+    end
   end
 
   context "parse_name_parts" do
